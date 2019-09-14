@@ -42,7 +42,7 @@ class_weights = calculate_class_weights(training_df)
 # Create the model
 print("Creating the model...")
 model = create_model(Hz)
-model.compile(optimiser=Adadelta(lr=1.0), loss=binary_crossentropy, metrics=[binary_accuracy])
+model.compile(optimizer=Adadelta(lr=1.0), loss=binary_crossentropy, metrics=[binary_accuracy])
 print("Created the model.")
 
 # Train the model with early stopping
