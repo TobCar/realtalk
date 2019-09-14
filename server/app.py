@@ -46,7 +46,7 @@ class Status(Resource):
         }, 200
 
 ## TODO transform data into flac.file
-def convert_to_flac(stream, file_handle)
+def convert_to_flac(stream, file_handle):
     return  # do work
 
 class Video(Resource):
@@ -56,12 +56,7 @@ class Video(Resource):
         url = json_data['url']
         tag = json_data['tag']
         ## TODO Call Youtube API with video id
-        YouTube('http://youtube.com/watch?v=9bZkp7q19f0')
-        .streams
-        .filter(only_audio=True, subtype='mp4')
-        .first()
-        .download()
-        .register_on_complete_callback(convert_to_flac)
+        YouTube('http://youtube.com/watch?v=9bZkp7q19f0').streams.filter(only_audio=True, subtype='mp4').first().download().register_on_complete_callback(convert_to_flac)
         ## TODO call model script
         ## TODO  grab return value of model endpoint
         ## TODO save return value to database
