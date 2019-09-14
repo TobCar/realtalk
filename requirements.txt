@@ -3,4 +3,4 @@ tensorflow==1.13.1
 numpy==1.16.2
 pytest==5.1.2
 soundfile==0.10.2
-librosa==0.7.0
+pydub==0.23.1
