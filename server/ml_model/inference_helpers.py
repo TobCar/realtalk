@@ -1,9 +1,9 @@
-from model_architecture import create_model
+from ml_model.model_architecture import create_model
 
 
 def inference_setup(Hz):
     model = create_model(Hz)
-    model.load_weights("model.h5")
+    model.load_weights("ml_model/model.h5")
     return model
 
 def round_predictions(predictions):

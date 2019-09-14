@@ -1,6 +1,7 @@
 ASVspoof2019_PA_real/
 .idea/
 .pytest_cache
+app.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

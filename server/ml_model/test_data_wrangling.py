@@ -1,5 +1,5 @@
 import numpy as np
-from data_wrangling import get_windows_from_array
+from ml_model.data_wrangling import get_windows_from_array
 
 
 def test_get_windows_from_array():

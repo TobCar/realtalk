@@ -1,5 +1,5 @@
-from data_wrangling import get_windows_from_array
-from inference_helpers import inference_setup, round_predictions
+from ml_model.data_wrangling import get_windows_from_array
+from ml_model.inference_helpers import inference_setup, round_predictions
 from pydub import AudioSegment
 import numpy as np
 
@@ -8,7 +8,7 @@ Hz = 16000  # 16kHz. Will downsample audio to this rate.
 model = inference_setup(Hz)
 
 
-def classify(self, audio_file_path):
+def classify(audio_file_path):
     """
     :param audio_file_path: Path to an mp3 file.
     :return: Array of 1 second values. Each entry in the array is whether that second is a real voice or not.
