@@ -9,7 +9,7 @@ def setup():
     mltest.setup()
 
 
-def test_ml_architecture():
+def test_model_architecture():
     Hz = 16000  # 16kHz
 
     # Make the model input a placeholder
