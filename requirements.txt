@@ -1,6 +1,4 @@
 pandas==0.24.1
 tensorflow==1.13.1
 numpy==1.16.2
-backports.tempfile==1.0
 pytest==5.1.2
-progressbar2==3.43.1

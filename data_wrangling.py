@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import soundfile as sf
-import progressbar
 
 
 def load_labels_df():
@@ -63,35 +62,39 @@ def split_data(labels_df):
     true_split = random_split(labels_df[labels_df["LABEL"] == 1])
     false_split = random_split(labels_df[labels_df["LABEL"] == 0])
 
-    training = true_split[0] + false_split[0]
-    validation = true_split[1] + false_split[1]
-    testing = true_split[2] + false_split[2]
+    training = pd.concat([true_split[0], false_split[0]], axis=0)
+    validation = pd.concat([true_split[1], false_split[1]], axis=0)
+    testing = pd.concat([true_split[2], false_split[2]], axis=0)
 
     return training, validation, testing
 
 
 def windows_for_each_file_labels_split(labels_df, values_per_window, overlap):
-    output = []
+    output_x = []
+    output_y = []
     print("Creating windows (separate X and Y arrays)...")
-    for index, _ in progressbar.progressbar(labels_df.iterrows()):
-        filename_w_extension = index + ".flac"
-        path = "ASVspoof2019_PA_real/ASVspoof2019_PA_real/flac/{}".format(filename_w_extension)
-        data, sample_rate = sf.read(path)
-        output = np.append(output, get_windows_from_array(data, values_per_window, overlap))
-    return output
-
-
-def windows_for_each_file_labels_together(labels_df, values_per_window, overlap):
-    output = np.array()
-    print("Creating windows (X and Y merged as tuples)...")
-    for index, row in progressbar.progressbar(labels_df.iterrows()):
+    for index, row in labels_df.iterrows():
+        print("Processing {}".format(index))
         label = row["LABEL"]
         filename_w_extension = index + ".flac"
         path = "ASVspoof2019_PA_real/ASVspoof2019_PA_real/flac/{}".format(filename_w_extension)
         data, sample_rate = sf.read(path)
         windows = get_windows_from_array(data, values_per_window, overlap)
-        tmp = np.empty((len(windows), values_per_window))
-        for i, window in enumerate(windows):
-            tmp[i] = (window, label)
-        output = np.append(output, tmp)
+        output_x = np.append(output_x, windows)
+        output_y += [label] * windows.shape[0]
+    return output_x, output_y
+
+
+def windows_for_each_file_labels_together(labels_df, values_per_window, overlap):
+    output = np.array([])
+    print("Creating windows (X and Y merged as tuples)...")
+    for index, row in labels_df.iterrows():
+        print("Processing {}".format(index))
+        label = row["LABEL"]
+        filename_w_extension = index + ".flac"
+        path = "ASVspoof2019_PA_real/ASVspoof2019_PA_real/flac/{}".format(filename_w_extension)
+        data, sample_rate = sf.read(path)
+        windows = get_windows_from_array(data, values_per_window, overlap)
+        for window in windows:
+            output = np.append(output, (window, label))
     return output
