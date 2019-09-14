@@ -8,6 +8,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from pytube import YouTube
 
+AUDIO_FILE_BASE_PATH = './files'
+
 basedir = os.path.abspath(os.path.dirname(__file__))
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
 SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -33,7 +35,6 @@ class Video(db.Model):
     ## This is the stream of values the model returns
     model_stream = db.Column(db.String(200), nullable=False)
 
-
     def __repr__(self):
         return '<Video %r>' % self.url
 
@@ -46,28 +47,42 @@ class Status(Resource):
             "status": "Working!"
         }, 200
 
-## TODO transform data into flac.file
-def convert_to_flac(stream, file_handle):
-    print("its the stream", stream)
-    print("its the file_handle", file_handle)
-    print('converting file to flac')
-    ffmpeg.input(file).output('out.flac',  **{'vn':None, 'f':'flac'}).overwrite_output().run()
-    return
 
 class Video(Resource):
+
+    def send_to_model(self, filename):
+        print('sending to model')
+        # TODO: send the file to the ML model
+        # TODO  grab return value of model endpoint
+        # TODO save return value to database
+        # TODO return value to client
+        return
+
+    def yt_progress_handler(self, stream, chunk, file_handler, bytes_remaining):
+        print(bytes_remaining)
+
+    def convert_to_mp3(self, stream, file_handle):
+        print("its the stream", stream)
+        print("its the file_handle", file_handle)
+        name = os.path.splitext(file_handle.name)[0].replace(" ", "_").lower()
+        output_name = '{name}.mp3'.format(name=name)
+        ffmpeg.input(file_handle.name).output(output_name, **{'vn':None,
+                                                              'f':'mp3'}).overwrite_output().run()
+
+        print('finished converting file to mp3', output_name)
+        self.send_to_model(output_name)
+        return
 
     def post(self):
         video_id = request.form['id']
         url = request.form['url']
         print("video_id is: ", video_id)
         yt = YouTube('http://youtube.com/watch?v=f20lWy2BTr8')
+        yt.register_on_complete_callback(self.convert_to_mp3)
+        yt.register_on_progress_callback(self.yt_progress_handler)
         stream = yt.streams.filter(only_audio=True, subtype='mp4').first()
-        yt.register_on_complete_callback(convert_to_flac)
-        stream.download()
-        ## TODO call model script
-        ## TODO  grab return value of model endpoint
-        ## TODO save return value to database
-        ## TODO return value to client
+
+        stream.download(output_path=AUDIO_FILE_BASE_PATH)
 
         return {
             "result": "OK"

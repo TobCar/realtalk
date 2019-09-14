@@ -10,6 +10,8 @@ __pycache__/
 
 # Output files
 *.flac
+*.mp4
+*.mp3
 
 # Distribution / packaging
 .Python
