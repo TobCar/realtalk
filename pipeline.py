@@ -33,7 +33,7 @@ print("Loading the data...")
 labels_df = load_labels_df()
 training_df, validation_df, testing_df = split_data(labels_df)
 training_x, training_y = windows_for_each_file_labels_split(training_df, values_per_window, overlap)
-validation = windows_for_each_file_labels_together(validation_df, values_per_window, overlap)
+validation = windows_for_each_file_labels_split(validation_df, values_per_window, overlap)
 print("Loaded the data.")
 
 # Calculate class weights based on the training data to avoid information leakage
@@ -65,5 +65,5 @@ print("Split test data into windows.")
 print("Evaluating on the test set...")
 output = model.evaluate(testing_x, testing_y, batch_size=batch_size)
 print("Evaluated on the test set! Metrics:")
-for i, metric_name in enumerate(model.metric_names):
+for i, metric_name in enumerate(model.metrics_names):
     print(metric_name + " " + str(output[i]))
