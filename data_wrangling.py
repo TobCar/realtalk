@@ -71,14 +71,18 @@ def split_data(labels_df):
 
 
 def windows_for_each_file_labels_split(labels_df, values_per_window, overlap):
-    output = []
+    output_x = []
+    output_y = []
     print("Creating windows (separate X and Y arrays)...")
-    for index, _ in progressbar.progressbar(labels_df.iterrows()):
+    for index, row in progressbar.progressbar(labels_df.iterrows()):
+        label = row["LABEL"]
         filename_w_extension = index + ".flac"
         path = "ASVspoof2019_PA_real/ASVspoof2019_PA_real/flac/{}".format(filename_w_extension)
         data, sample_rate = sf.read(path)
-        output = np.append(output, get_windows_from_array(data, values_per_window, overlap))
-    return output
+        windows = get_windows_from_array(data, values_per_window, overlap)
+        output_x = np.append(output_x, windows)
+        output_y += [label] * windows.shape[0]
+    return output_x, output_y
 
 
 def windows_for_each_file_labels_together(labels_df, values_per_window, overlap):
