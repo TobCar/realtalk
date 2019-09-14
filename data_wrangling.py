@@ -62,9 +62,9 @@ def split_data(labels_df):
     true_split = random_split(labels_df[labels_df["LABEL"] == 1])
     false_split = random_split(labels_df[labels_df["LABEL"] == 0])
 
-    training = true_split[0] + false_split[0]
-    validation = true_split[1] + false_split[1]
-    testing = true_split[2] + false_split[2]
+    training = pd.concat([true_split[0], false_split[0]], axis=0)
+    validation = pd.concat([true_split[1], false_split[1]], axis=0)
+    testing = pd.concat([true_split[2], false_split[2]], axis=0)
 
     return training, validation, testing
 
