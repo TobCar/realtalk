@@ -1,0 +1,38 @@
+body {
+    width: 300px;
+    height: 350px;
+    font-family: Helvetica;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+    background-color: #C4302B;
+    font-weight: 1750;
+    color: white;
+}
+
+ul, li, a, a:hover, a:focus, a:active {
+    text-decoration: none;
+    list-style: none;
+    color: inherit;
+    outline: none;
+}
+
+.container {
+    width: 100%;
+    height: max-content;
+}
+
+.center {
+    text-align: center;
+}
+
+.header {
+    font-weight: 3000;
+    margin-top: 20px;
+    color: #fff;
+}
+
+.p1 {
+    margin-top: 10px;
+}
