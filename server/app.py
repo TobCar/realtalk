@@ -51,10 +51,8 @@ def convert_to_flac(stream, file_handle):
 
 class Video(Resource):
     def post(self):
-        json_data = request.get_json(force=True)
-        video_id = json_data['id']
-        url = json_data['url']
-        tag = json_data['tag']
+        video_id = request.form['id']
+        url = request.form['url']
         ## TODO Call Youtube API with video id
         YouTube('http://youtube.com/watch?v=9bZkp7q19f0').streams.filter(only_audio=True, subtype='mp4').first().download().register_on_complete_callback(convert_to_flac)
         ## TODO call model script
