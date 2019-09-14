@@ -7,6 +7,7 @@ from flask_restplus import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from pytube import YouTube
+from ml_model import inference
 
 AUDIO_FILE_BASE_PATH = './files'
 
@@ -52,6 +53,7 @@ class Video(Resource):
 
     def send_to_model(self, filename):
         print('sending to model')
+        out = inference.classify(filename)
         # TODO: send the file to the ML model
         # TODO  grab return value of model endpoint
         # TODO save return value to database
