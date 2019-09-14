@@ -60,3 +60,12 @@ http://localhost:5000/api/v1/
 Failed to build psycopg2
 To fix this: https://stackoverflow.com/questions/34304833/failed-building-wheel-for-psycopg2-macosx-using-virtualenv-and-pip
 ```
+
+
+## Deploying to Heroku (run from the root folder)
+```
+heroku login
+heroku config:set FLASK_APP=autoapp.py --app realtalk-server
+heroku config:set FLASK_DEBUG=1 --app realtalk-server
+git subtree push --prefix server heroku master
+```
