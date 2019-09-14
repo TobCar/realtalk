@@ -1,5 +1,5 @@
-from data_wrangling import load_labels_df, calculate_class_weights, split_data, windows_for_each_file_labels_split, windows_for_each_file_labels_together
-from model_architecture import create_model
+from ml_model.data_wrangling import load_labels_df, calculate_class_weights, split_data, windows_for_each_file_labels_split, windows_for_each_file_labels_together
+from mml_model.odel_architecture import create_model
 import numpy as np
 import os
 import tensorflow as tf

@@ -50,13 +50,10 @@ class Status(Resource):
 class Video(Resource):
 
     def send_to_model(self, filename):
-        print('sending to model')
-        out = inference.classify(filename)
-        # TODO: send the file to the ML model
-        # TODO  grab return value of model endpoint
-        # TODO save return value to database
-        # TODO return value to client
-        return
+        print('sending file path for inference')
+        return {
+            "result": inference.classify(filename)
+        }, 200
 
     def yt_progress_handler(self, stream, chunk, file_handler, bytes_remaining):
         print(bytes_remaining)

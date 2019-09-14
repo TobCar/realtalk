@@ -1,5 +1,5 @@
-from data_wrangling import get_windows_from_array
-from inference_helpers import inference_setup, round_predictions
+from ml_model.data_wrangling import get_windows_from_array
+from ml_model.inference_helpers import inference_setup, round_predictions
 from pydub import AudioSegment
 import numpy as np
 
