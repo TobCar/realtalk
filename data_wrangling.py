@@ -86,7 +86,7 @@ def windows_for_each_file_labels_split(labels_df, values_per_window, overlap):
 
 
 def windows_for_each_file_labels_together(labels_df, values_per_window, overlap):
-    output = np.array()
+    output = np.array([])
     print("Creating windows (X and Y merged as tuples)...")
     for index, row in progressbar.progressbar(labels_df.iterrows()):
         label = row["LABEL"]
