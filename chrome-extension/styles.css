@@ -6,9 +6,9 @@ body {
     padding: 0;
     margin: 0;
     font-size: 16px;
-    background-color: #C4302B;
+    background-color: #fff;
     font-weight: 1750;
-    color: white;
+    color: black;
 }
 
 ul, li, a, a:hover, a:focus, a:active {
@@ -20,6 +20,7 @@ ul, li, a, a:hover, a:focus, a:active {
 
 .container {
     width: 100%;
+    height: 100%;
     height: max-content;
 }
 
@@ -30,9 +31,22 @@ ul, li, a, a:hover, a:focus, a:active {
 .header {
     font-weight: 3000;
     margin-top: 20px;
-    color: #fff;
+    color: black;
 }
 
 .p1 {
     margin-top: 10px;
+}
+
+.p2 {
+    margin-top: 10px;
+    color: black;
+}
+
+.bg-green {
+    background-color: green;
+}
+
+.bg-red {
+    background-color: red;
 }

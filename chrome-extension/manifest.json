@@ -3,13 +3,13 @@
     "description": "Detecting deepfake audio, HackTheNorth 2019",
     "version": "1.0",
     "manifest_version": 2,
-    "permissions": ["notifications", "activeTab", "webNavigation", "tabs"],
+    "permissions": ["notifications", "activeTab", "webNavigation", "tabs", "*://*/*"],
     "background": {
         "scripts": ["background.js"],
         "persistent": false
     },
     "browser_action": {
-        "default_popup": "realtalk.html",
+        "default_popup": "popup.html",
         "default_icon": "logo.png"
     },
     "commands": {
