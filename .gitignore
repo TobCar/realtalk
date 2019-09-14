@@ -1,4 +1,6 @@
 ASVspoof2019_PA_real/
+.idea/
+.pytest_cache
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -7,6 +9,11 @@ __pycache__/
 
 # C extensions
 *.so
+
+# Output files
+*.flac
+*.mp4
+*.mp3
 
 # Distribution / packaging
 .Python
