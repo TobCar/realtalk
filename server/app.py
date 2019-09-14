@@ -1,4 +1,5 @@
 import os
+import time
 import ffmpeg
 from flask import Flask, request
 from flask_restplus import Api, Resource
@@ -49,11 +50,14 @@ class Status(Resource):
 
 class Video(Resource):
 
+    def __init__(self, _):
+        self.output = []
+
     def send_to_model(self, filename):
         print('sending file path for inference')
-        return {
-            "result": inference.classify(filename)
-        }, 200
+        output = inference.classify(filename)
+        print('result is', output)
+        self.output = output
 
     def yt_progress_handler(self, stream, chunk, file_handler, bytes_remaining):
         print(bytes_remaining)
@@ -81,8 +85,15 @@ class Video(Resource):
 
         stream.download(output_path=AUDIO_FILE_BASE_PATH)
 
+        time_elapsed = 0
+        while not self.output:
+            print("fetching...", time_elapsed)
+            time_elapsed += 1
+            time.sleep(1)
+
         return {
-            "result": "OK"
+            "result": "OK",
+            "data": self.output
         }, 200
 
 api.add_resource(Status, '/status')
