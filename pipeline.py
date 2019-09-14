@@ -57,3 +57,13 @@ print("Finished training the model!")
 print("Saving model weights...")
 model.save_weights("model.h5")
 print("Saved model weights.")
+
+print("Splitting up test data into windows.")
+testing_x, testing_y = windows_for_each_file_labels_split(testing_df, values_per_window, overlap)
+print("Split test data into windows.")
+
+print("Evaluating on the test set...")
+output = model.evaluate(testing_x, testing_y, batch_size=batch_size)
+print("Evaluated on the test set! Metrics:")
+for i, metric_name in enumerate(model.metric_names):
+    print(metric_name + " " + str(output[i]))
