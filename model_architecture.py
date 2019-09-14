@@ -2,8 +2,8 @@ from tensorflow.keras.layers import Input, MaxPool1D, Conv1D, BatchNormalization
 from tensorflow.keras import Model
 
 
-def create_model(samples):
-    inputs = Input((samples, 1))
+def create_model(sample_rate):
+    inputs = Input((sample_rate, 1))
 
     # 1D Convolutional Layers, first two blocks include max pooling
     X = Conv1D(16, kernel_size=64, strides=2, activation="relu")(inputs)
