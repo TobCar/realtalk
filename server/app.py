@@ -47,19 +47,24 @@ class Status(Resource):
 
 ## TODO transform data into flac.file
 def convert_to_flac(stream, file_handle):
+    print("its the stream", stream)
+    print("its the file_handle", file_handle)
     return  # do work
 
 class Video(Resource):
+
     def post(self):
         video_id = request.form['id']
         url = request.form['url']
-        ## TODO Call Youtube API with video id
-        YouTube('http://youtube.com/watch?v=9bZkp7q19f0').streams.filter(only_audio=True, subtype='mp4').first().download().register_on_complete_callback(convert_to_flac)
+        print("video_id is: ", video_id)
+        yt = YouTube('http://youtube.com/watch?v=f20lWy2BTr8')
+        stream = yt.streams.filter(only_audio=True, subtype='mp4').first()
+        yt.register_on_complete_callback(convert_to_flac)
+        stream.download()
         ## TODO call model script
         ## TODO  grab return value of model endpoint
         ## TODO save return value to database
         ## TODO return value to client
-        print("video_id is: ", video_id)
 
         return {
             "result": "OK"
