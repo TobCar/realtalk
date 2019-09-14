@@ -1,5 +1,5 @@
-from tf.keras.layers import MaxPooling, Conv1D, BatchNormalization, Dense, Dropout
-from tf.keras import Sequential
+from tensorflow.keras.layers import MaxPool1D, Conv1D, BatchNormalization, Dense, Dropout
+from tensorflow.keras import Sequential
 
 
 def create_model(samples):
@@ -8,11 +8,11 @@ def create_model(samples):
     # 1D Convolutional Layers, first two blocks include max pooling
     model.add(Conv1D(16, kernel_size=64, strides=2, input_shape=(samples), activation="relu"))
     model.add(BatchNormalization())
-    model.add(MaxPooling(pool_size=8, strides=8))
+    model.add(MaxPool1D(pool_size=8, strides=8))
 
     model.add(Conv1D(32, kernel_size=32, strides=2, activation="relu"))
     model.add(BatchNormalization())
-    model.add(MaxPooling(pool_size=8, strides=8))
+    model.add(MaxPool1D(pool_size=8, strides=8))
 
     model.add(Conv1D(64, kernel_size=16, strides=2, activation="relu"))
     model.add(BatchNormalization())
