@@ -19,28 +19,39 @@ CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = SQLALCHEMY_DATABASE_URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
 
-
 api = Api(app)
 db = SQLAlchemy(app)
 
-db.drop_all()
 
-class Video(db.Model):
+# DB stuff -------------------------------------------------------------
+def clear_data(session):
+    meta = db.metadata
+    for table in reversed(meta.sorted_tables):
+        print('Clearing table {0}'.format(table))
+        session.execute(table.delete())
+    session.commit()
+
+# start database from scratch
+clear_data(db.session)
+
+class VideoInfo(db.Model):
     __tablename__ = 'video'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String(50), primary_key=True)
     url = db.Column(db.String(80), unique=True, nullable=False)
-    tag = db.Column(db.String(120), unique=True, nullable=False)
-    video_id = db.Column(db.Integer, unique=True, nullable=False)
+    file_name = db.Column(db.String(100), unique=True, nullable=False)
+    tag = db.Column(db.String(120), nullable=True)
+    video_id = db.Column(db.String(50), unique=True, nullable=False)
+    count = db.Column(db.Integer, nullable=False)
     ## Convert [0, 1, 1, 2, 1, 1, 0] to "0,1,1,2,1,1,0" for database storage
     ## This is the stream of values the model returns
-    model_stream = db.Column(db.String(200), nullable=False)
+    output = db.Column(db.String(500), nullable=True)
 
     def __repr__(self):
         return '<Video %r>' % self.url
 
-db.create_all()
+db.create_all() # must come after above class definitions
 
-# Dashboard Stuff ---------------------
+# API stuff ------------------------------------------------------------
 class Status(Resource):
     def get(self):
         return {
@@ -52,32 +63,68 @@ class Video(Resource):
 
     def __init__(self, _):
         self.output = []
+        self.file_name = ''
+
+    def cache(self, data):
+        print('caching data', data)
+        output_string = ",".join(map(str, data['output']))
+        video_info = VideoInfo(id=data['id'], url=data['url'],
+                               file_name=data['file_name'], tag=data['tag'],
+                               video_id=data['video_id'], count=data['count'],
+                               output=output_string)
+        db.session.add(video_info)
+        db.session.commit()
+        return True
+
+    def check_cache(self, video_id):
+        print('checking cache')
+        row = VideoInfo.query.filter_by(video_id=video_id).first()
+        if row:
+            print('cache hit')
+            video_info = {
+                'id':row.id,
+                'url':row.url,
+                'file_name':row.file_name,
+                'tag':row.tag,
+                'video_id':row.video_id,
+                'count':row.count,
+                'output':row.output.split(',')
+            }
+            return True, video_info
+
+        print('cache miss')
+        return False, {}
 
     def send_to_model(self, filename):
-        print('sending file path for inference')
+        print('starting prediction')
         output = inference.classify(filename)
-        print('result is', output)
         self.output = output
 
     def yt_progress_handler(self, stream, chunk, file_handler, bytes_remaining):
-        print(bytes_remaining)
+        print('bytes remaining:', bytes_remaining)
 
     def convert_to_mp3(self, stream, file_handle):
-        print("its the stream", stream)
-        print("its the file_handle", file_handle)
         name = os.path.splitext(file_handle.name)[0].replace(" ", "_").lower()
-        output_name = '{name}.mp3'.format(name=name)
-        ffmpeg.input(file_handle.name).output(output_name, **{'vn':None,
+        self.file_name = '{name}.mp3'.format(name=name)
+        ffmpeg.input(file_handle.name).output(self.file_name, **{'vn':None,
                                                               'f':'mp3'}).overwrite_output().run()
-
-        print('finished converting file to mp3', output_name)
-        self.send_to_model(output_name)
+        print('sending file to model', self.file_name)
+        self.send_to_model(self.file_name)
         return
 
     def post(self):
         video_id = request.form['id']
         url = request.form['url']
-        print("video_id is: ", video_id)
+        print("downloading youtube video:", video_id)
+
+        cached, result = self.check_cache(video_id)
+        if cached:
+            print('returning cached result')
+            return {
+                "result": "OK",
+                "data": result['output']
+            }, 200
+
         yt = YouTube('http://youtube.com/watch?v=f20lWy2BTr8')
         yt.register_on_complete_callback(self.convert_to_mp3)
         yt.register_on_progress_callback(self.yt_progress_handler)
@@ -87,9 +134,24 @@ class Video(Resource):
 
         time_elapsed = 0
         while not self.output:
-            print("fetching...", time_elapsed)
+            print("developing prediction...", time_elapsed)
             time_elapsed += 1
             time.sleep(1)
+
+        # cache the result
+        id = video_id # video_id should be unique for youtube
+        tag = 'youtube'
+        count = 0
+        cache_row = {
+            'id':id,
+            'url':url,
+            'file_name':self.file_name,
+            'tag':tag,
+            'video_id':video_id,
+            'count':0,
+            'output':self.output
+        }
+        self.cache(cache_row)
 
         return {
             "result": "OK",
