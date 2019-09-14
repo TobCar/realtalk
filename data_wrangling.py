@@ -1,4 +1,7 @@
+import numpy as np
 import pandas as pd
+import soundfile as sf
+import progressbar
 
 
 def load_labels_df():
@@ -12,3 +15,83 @@ def load_labels_df():
     relevant_df = df[["AUDIO_FILE_NAME", "LABEL"]]
     relevant_df.set_index("AUDIO_FILE_NAME", inplace=True)
     return relevant_df
+
+
+def calculate_class_weights(labels_df):
+    """
+    :param labels_df: Data Frame with the column "LABEL"
+    :return: Class weights
+    """
+    real = len(labels_df[labels_df["LABEL"] == 1])
+    fake = len(labels_df[labels_df["LABEL"] == 0])
+    return {1: fake / real, 0: real / fake}
+
+
+def get_windows_from_array(arr, values_per_window, overlap):
+    """
+    :param arr: Array to split up
+    :param values_per_window: Values per window.
+    :param overlap: Percent overlap between windows. Determines how much the window moves.
+    :return: 2D array.
+    """
+    stride = int(values_per_window * (1 - overlap))
+    output = []
+    left = 0
+    right = values_per_window
+    while right <= len(arr):
+        output.append(arr[left:right])
+        left += stride
+        right += stride
+    return np.array(output)
+
+
+def random_split(df):
+    train_percent = 0.80
+    validation_percent = 0.10
+
+    perm = np.random.permutation(df.index)
+    m = len(df)
+    train_end = int(train_percent * m)
+    validate_end = int(validation_percent * m) + train_end
+    train = df.loc[perm[:train_end]]
+    validate = df.loc[perm[train_end:validate_end]]
+    test = df.loc[perm[validate_end:]]
+    return train, validate, test
+
+
+def split_data(labels_df):
+    true_split = random_split(labels_df[labels_df["LABEL"] == 1])
+    false_split = random_split(labels_df[labels_df["LABEL"] == 0])
+
+    training = true_split[0] + false_split[0]
+    validation = true_split[1] + false_split[1]
+    testing = true_split[2] + false_split[2]
+
+    return training, validation, testing
+
+
+def windows_for_each_file_labels_split(labels_df, values_per_window, overlap):
+    output = []
+    print("Creating windows (separate X and Y arrays)...")
+    for index, _ in progressbar.progressbar(labels_df.iterrows()):
+        filename_w_extension = index + ".flac"
+        path = "ASVspoof2019_PA_real/ASVspoof2019_PA_real/flac/{}".format(filename_w_extension)
+        data, sample_rate = sf.read(path)
+        output = np.append(output, get_windows_from_array(data, values_per_window, overlap))
+    return output
+
+
+def windows_for_each_file_labels_together(labels_df, values_per_window, overlap):
+    output = np.array()
+    print("Creating windows (X and Y merged as tuples)...")
+    for index, row in progressbar.progressbar(labels_df.iterrows()):
+        label = row["LABEL"]
+        filename_w_extension = index + ".flac"
+        path = "ASVspoof2019_PA_real/ASVspoof2019_PA_real/flac/{}".format(filename_w_extension)
+        data, sample_rate = sf.read(path)
+        windows = get_windows_from_array(data, values_per_window, overlap)
+        tmp = np.empty((len(windows), values_per_window))
+        for i, window in enumerate(windows):
+            tmp[i] = (window, label)
+        output = np.append(output, tmp)
+    return output
