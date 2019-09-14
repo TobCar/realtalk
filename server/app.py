@@ -1,5 +1,6 @@
 import os
 import uuid
+import ffmpeg
 import datetime
 from flask import Flask, request
 from flask_restplus import Api, Resource
@@ -47,7 +48,9 @@ class Status(Resource):
 
 ## TODO transform data into flac.file
 def convert_to_flac(stream, file_handle):
-    return  # do work
+    print('converting file to flac')
+    ffmpeg.input(file).output('out.flac',  **{'vn':None, 'f':'flac'}).overwrite_output().run()
+    return
 
 class Video(Resource):
     def post(self):

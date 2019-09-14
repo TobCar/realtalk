@@ -38,6 +38,7 @@ This endpoint accepts a JSON payload, which you can test by running `./test.sh`
 
 ## Project Setup
 ```
+brew install ffmpeg
 virtualenv venv -p python3
 source venv/bin/activate
 pip install -r requirements.txt
