@@ -15,7 +15,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 });
 
 // Expect messages from content scripts to change the popup
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+/*chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.loading && (request.loading == "true")) {
         chrome.browserAction.setPopup({ popup: "popup-loading.html" });
     }
@@ -38,4 +38,4 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             chrome.browserAction.setPopup({ popup: "popup.html" });
         }
     }
-});
+});*/
