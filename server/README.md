@@ -42,7 +42,9 @@ brew install ffmpeg
 virtualenv venv -p python3
 source venv/bin/activate
 pip install -r requirements.txt
-./run.sh
+pip install -e forked-packages/pytube
+pip install -e forked-packages/gunicorn
+gunicorn app:app
 ```
 Point your browser/GET request to:
 http://localhost:5000/api/v1/status
