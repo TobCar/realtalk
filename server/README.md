@@ -41,7 +41,8 @@ This endpoint accepts a JSON payload, which you can test by running `./test.sh`
 virtualenv venv -p python3
 source venv/bin/activate
 pip install -r requirements.txt
-./run.sh
+pip install -e forked-packages/pytube
+gunicorn app:app
 ```
 Point your browser/GET request to:
 http://localhost:5000/api/v1/status
