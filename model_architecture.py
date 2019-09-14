@@ -2,11 +2,11 @@ from tf.keras.layers import MaxPooling, Conv1D, BatchNormalization, Dense, Dropo
 from tf.keras import Sequential
 
 
-def create_model():
+def create_model(samples):
     model = Sequential()
 
     # 1D Convolutional Layers, first two blocks include max pooling
-    model.add(Conv1D(16, kernel_size=64, strides=2, input_shape=(compound_image_size, compound_image_size, number_of_channels), activation="relu"))
+    model.add(Conv1D(16, kernel_size=64, strides=2, input_shape=(samples), activation="relu"))
     model.add(BatchNormalization())
     model.add(MaxPooling(pool_size=8, strides=8))
 
