@@ -1,1 +1,3 @@
+pip install -e forked-packages/pytube
+pip install -e forked-packages/gunicorn
 web: gunicorn app:app
