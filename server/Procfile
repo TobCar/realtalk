@@ -1,3 +1,2 @@
-sudo apt-get install libsndfile-dev
 pip install -e forked-packages/pytube
 web: gunicorn app:app --timeout 240
