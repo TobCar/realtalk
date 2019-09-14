@@ -1,6 +1,6 @@
 {
     "name": "Real Talk",
-    "description": "Detecting deepfake audio, HackTheNorth 2019",
+    "description": "Detecting fake audio. HackTheNorth 2019.",
     "version": "1.0",
     "manifest_version": 2,
     "permissions": ["notifications", "activeTab", "webNavigation", "tabs", "*://*/*"],

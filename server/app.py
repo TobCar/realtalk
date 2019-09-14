@@ -1,7 +1,5 @@
 import os
-import uuid
 import ffmpeg
-import datetime
 from flask import Flask, request
 from flask_restplus import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
