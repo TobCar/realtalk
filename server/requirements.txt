@@ -56,3 +56,4 @@ text-unidecode==1.2
 Werkzeug==0.15.3
 wrapt==1.10.11
 youtube-dl==2019.9.12.1
+gunicorn==19.9.0

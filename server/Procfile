@@ -1,1 +1,2 @@
-web: gunicorn app:app
+pip install -e forked-packages/pytube
+web: gunicorn app:app --timeout 240

@@ -5,7 +5,7 @@ Detects fake voices in YouTube videos with 94% accuracy and alerts the user to p
 
 Tobias Carryer - Did the machine learning stuff
 
-Shannon Hogan - Made the Python server
+Shannon Hogan - Made the Python server (and Helped with Chrome Extension)
 
 John Lee - Also made the Python server
 
