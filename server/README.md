@@ -43,8 +43,7 @@ virtualenv venv -p python3
 source venv/bin/activate
 pip install -r requirements.txt
 pip install -e forked-packages/pytube
-pip install -e forked-packages/gunicorn
-gunicorn app:app
+gunicorn app:app --timeout 240
 ```
 Point your browser/GET request to:
 http://localhost:5000/api/v1/status
