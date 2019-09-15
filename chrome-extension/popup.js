@@ -3,12 +3,20 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     var msg = request.message;
     if (msg) {
         if (msg == "loading") {
-            document.getElementById("prompt").innerHTML = "Loading";
+            const player = document.querySelector('lottie-player');
+            player.load('https://assets8.lottiefiles.com/temp/lf20_3bpCnZ.json');
+            document.getElementById("prompt").innerHTML = "Running analysis...";
         } else if (msg == "real") {
-            document.getElementById("prompt").innerHTML = "Real";
+            const player = document.querySelector('lottie-player');
+            player.load('https://assets8.lottiefiles.com/temp/lf20_3bpCnZ.json');
+            document.getElementById("prompt").innerHTML = "Audio is likely real";
         } else if (msg == "fake") {
-            document.getElementById("prompt").innerHTML = "Fake";
+            const player = document.querySelector('lottie-player');
+            player.load('https://assets3.lottiefiles.com/temp/lf20_tNI4Yn.json');
+            document.getElementById("prompt").innerHTML = "Audio is likely fake";
         } else if (msg == "default") {
+            const player = document.querySelector('lottie-player');
+            player.load('https://assets6.lottiefiles.com/packages/lf20_lqsmgn.json');
             document.getElementById("prompt").innerHTML = "";
         } else {
             document.getElementById("prompt").innerHTML = "";

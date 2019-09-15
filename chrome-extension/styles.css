@@ -21,7 +21,7 @@ ul, li, a, a:hover, a:focus, a:active {
 .container {
     width: 100%;
     height: 100%;
-    height: max-content;
+    text-align: center;
 }
 
 .center {
@@ -35,19 +35,21 @@ ul, li, a, a:hover, a:focus, a:active {
 }
 
 .logo {
-  max-width: 300px;
-  max-height: 200px;
-  margin-top: -25px;
+    max-width: 300px;
+    max-height: 200px;
+    margin-top: -25px;
 }
 
-.p1 {
-    margin-top: 10px;
+.lottie {
+  height: 180px;
+  width: 150px;
+  display: inline-block;
 }
 
-.p2 {
+.subtext {
     margin-top: 10px;
-    color: black;
-    font-size: 24px;
+    color: slate-grey;
+    font-size: 12px;
 }
 
 .bg-green {
