@@ -1,6 +1,7 @@
 import os
 import time
 import ffmpeg
+import boto
 from flask import Flask, request
 from flask_restplus import Api, Resource
 from flask_sqlalchemy import SQLAlchemy
@@ -8,6 +9,8 @@ from flask_cors import CORS
 from pytube import YouTube
 from ml_model import inference
 from gcs import GCS
+from gcs.Streamable import Streamable
+from google.cloud import storage
 
 AUDIO_FILE_BASE_PATH = './files'
 GCS_BUCKET_NAME = 'realtalk-252903.appspot.com'
@@ -15,6 +18,9 @@ GCS_BUCKET_NAME = 'realtalk-252903.appspot.com'
 basedir = os.path.abspath(os.path.dirname(__file__))
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+storage_client = storage.Client.from_service_account_json('./gcs/realtalk-c580fb239c1b.json')
+
 
 app = Flask(__name__)
 CORS(app)
@@ -89,6 +95,7 @@ class Video(Resource):
     def __init__(self, _):
         self.output = []
         self.file_name = ''
+        self.dst_uri = ''
 
     def cache(self, data):
         row = VideoInfo.query.filter_by(video_id=data['video_id']).first()
@@ -132,6 +139,10 @@ class Video(Resource):
 
     def yt_progress_handler(self, stream, chunk, file_handler, bytes_remaining):
         print('bytes remaining:', bytes_remaining)
+        with Streamable(client=storage_client, bucket_name=GCS_BUCKET_NAME, blob_name='pikachu-time') as s:
+            s.write(chunk)
+        # self.dst_uri.new_key().set_contents_from_stream(chunk)
+        # print('sent chunk:', chunk)
 
     def convert_to_mp3(self, stream, file_handle):
         name = os.path.splitext(file_handle.name)[0].replace(" ", "_").lower()
@@ -148,7 +159,7 @@ class Video(Resource):
         print("downloading youtube video:", video_id)
 
         cached, result = self.check_cache(video_id)
-        # TODO: uncomment in prod 
+        # TODO: uncomment in prod
         # if cached:
         #     print('returning cached result')
         #     return {
@@ -157,20 +168,29 @@ class Video(Resource):
         #     }, 200
 
         # TODO: uncomment in prod
-        # yt = YouTube('http://youtube.com/watch?v=f20lWy2BTr8')
+        # TODO: should use passed in url
+        yt = YouTube('https://www.youtube.com/watch?v=CrJ4KUjFheQ')
         # yt.register_on_complete_callback(self.convert_to_mp3)
-        # yt.register_on_progress_callback(self.yt_progress_handler)
-        # stream = yt.streams.filter(only_audio=True, subtype='mp4').first()
+        yt.register_on_progress_callback(self.yt_progress_handler)
+        stream = yt.streams.filter(only_audio=True, subtype='mp4').first()
+        stream.stream_to_buffer()
+        #
+        # self.file_name = video_id
+        # my_stream = open(filename, 'rb')
+        # self.dst_uri = boto.storage_uri(GCS_BUCKET_NAME + '/' + self.file_name, 'gs')
+        # dst_uri.new_key().set_contents_from_stream(stream)
+
         # stream.download(output_path=AUDIO_FILE_BASE_PATH)
 
         # TODO: following is temporary code for dev purposes
         self.output = [0, 1, 0, 0, 1, 1]
         self.file_name = 'highlights_of_trudeaus_victory_speech.mp3'
-        gcs_url = GCS.upload_to_bucket('testing',
-                             AUDIO_FILE_BASE_PATH + '/highlights_of_trudeaus_victory_speech.mp3',
-                             GCS_BUCKET_NAME)
-        print('finished uploading to GCS bucket at url:', gcs_url)
-        print('filename is ', self.file_name)
+        # gcs_url = GCS.upload_to_bucket('testing',
+        #                      AUDIO_FILE_BASE_PATH + '/highlights_of_trudeaus_victory_speech.mp3',
+        #                      GCS_BUCKET_NAME)
+        # print('finished uploading to GCS bucket at url:', gcs_url)
+        # print('filename is ', self.file_name)
+
 
         #print('url:', gcs_url)
         time_elapsed = 0
