@@ -11,8 +11,8 @@ from gcs import GCS
 from gcs.Streamable import Streamable
 from google.cloud import storage
 
-# AUDIO_FILE_BASE_PATH = './files'
-AUDIO_FILE_BASE_PATH = '/tmp'
+AUDIO_FILE_BASE_PATH = './files'
+# AUDIO_FILE_BASE_PATH = '/tmp'
 GCS_BUCKET_NAME = 'realtalk-252903.appspot.com'
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -21,6 +21,8 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 storage_client = storage.Client.from_service_account_json('./gcs/realtalk-c580fb239c1b.json')
 
+
+MOCK_1 = [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
 app = Flask(__name__)
 CORS(app)
@@ -39,7 +41,7 @@ def clear_data(session):
     session.commit()
 
 # start database from scratch
-clear_data(db.session)
+# clear_data(db.session)
 
 class VideoInfo(db.Model):
     __tablename__ = 'video'
@@ -97,6 +99,28 @@ class Video(Resource):
         self.file_name = ''
         self.dst_uri = ''
 
+    def get(self):
+        self.add_hardcoded()
+        return {
+            "result": "Cached video files"
+        }, 200
+
+
+    def add_hardcoded():
+        mock_data = [
+            ['cQ54GDm1eL0', 'https://www.youtube.com/watch?v=cQ54GDm1eL0', 'You Won’t Believe What Obama Says In This Video!', '', 'cQ54GDm1eL0',0, []],
+            ['VnFC-s2nOtI', 'https://www.youtube.com/watch?v=VnFC-s2nOtI', 'This AI Can Clone Any Voice, Including Yours', '', 'VnFC-s2nOtI',0, []],
+            ['YfU_sWHT8mo', 'https://www.youtube.com/watch?v=YfU_sWHT8mo', 'Lyrebird - Create a digital copy of your voice', '', 'YfU_sWHT8mo',0, []]
+        ]
+
+        for v in mock_data:
+            video_info = VideoInfo(id=v[0], url=v[1], file_name=v[2],
+                                   tag=v[3],video_id=v[4],
+                                   count=v[5],output=",".join(map(str, v[6])))
+            db.session.add(video_info)
+            db.session.commit()
+
+
     def cache(self, data):
         row = VideoInfo.query.filter_by(video_id=data['video_id']).first()
         if row:
@@ -149,11 +173,12 @@ class Video(Resource):
     def convert_to_mp3(self, stream, file_handle):
         name = os.path.splitext(file_handle.name)[0].replace(" ", "_").lower()
         self.file_name = '{name}.mp3'.format(name=name)
-        ffmpeg.input(file_handle.name).output(self.file_name, **{'vn':None,
-                                                              'f':'mp3'}).overwrite_output().run()
+
+        ffmpeg.input(file_handle.name).output(self.file_name, **{'vn':None,'f':'mp3'}).overwrite_output().run()
         print('sending file to model', self.file_name)
         self.send_to_model(self.file_name)
         return
+
 
     def post(self):
         video_id = request.form['id']
@@ -161,7 +186,7 @@ class Video(Resource):
         print("downloading youtube video:", video_id)
 
         cached, result = self.check_cache(video_id)
-        # TODO: uncomment in prod
+
         if cached:
             print('returning cached result')
             return {
@@ -171,10 +196,12 @@ class Video(Resource):
 
         # TODO: uncomment in prod
         # TODO: should use passed in url
-        yt = YouTube('https://www.youtube.com/watch?v=CrJ4KUjFheQ')
+        yt = YouTube(url)
+        # yt = YouTube('https://www.youtube.com/watch?v=CrJ4KUjFheQ')
         yt.register_on_complete_callback(self.convert_to_mp3)
         yt.register_on_progress_callback(self.yt_progress_handler)
         stream = yt.streams.filter(only_audio=True, subtype='mp4').first()
+        stream.download(output_path=AUDIO_FILE_BASE_PATH)
         # stream.stream_to_buffer() # TODO-2: uncomment for gcs
 
         # self.file_name = video_id
@@ -182,7 +209,6 @@ class Video(Resource):
         # self.dst_uri = boto.storage_uri(GCS_BUCKET_NAME + '/' + self.file_name, 'gs')
         # dst_uri.new_key().set_contents_from_stream(stream)
 
-        stream.download(output_path=AUDIO_FILE_BASE_PATH)
 
         # TODO: following is temporary code for dev purposes
         # self.output = [0, 1, 0, 0, 1, 1]
