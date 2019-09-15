@@ -67,6 +67,11 @@ class Video(Resource):
         self.file_name = ''
 
     def cache(self, data):
+        row = VideoInfo.query.filter_by(video_id=data['video_id']).first()
+        if row:
+            print('Entry already exists')
+            return False
+
         print('caching data', data)
         output_string = ",".join(map(str, data['output']))
         video_info = VideoInfo(id=data['id'], url=data['url'],
@@ -119,23 +124,28 @@ class Video(Resource):
         print("downloading youtube video:", video_id)
 
         cached, result = self.check_cache(video_id)
-        if cached:
-            continue # TODO: remove in production
-            print('returning cached result')
-            return {
-                "result": "OK",
-                "data": result['output']
-            }, 200
+        # TODO: uncomment in prod 
+        # if cached:
+        #     print('returning cached result')
+        #     return {
+        #         "result": "OK",
+        #         "data": result['output']
+        #     }, 200
 
+        # TODO: uncomment in prod
         # yt = YouTube('http://youtube.com/watch?v=f20lWy2BTr8')
         # yt.register_on_complete_callback(self.convert_to_mp3)
         # yt.register_on_progress_callback(self.yt_progress_handler)
         # stream = yt.streams.filter(only_audio=True, subtype='mp4').first()
         # stream.download(output_path=AUDIO_FILE_BASE_PATH)
+
+        # TODO: following is temporary code for dev purposes
         self.output = [0, 1, 0, 0, 1, 1]
+        self.file_name = 'highlights_of_trudeaus_victory_speech.mp3'
         gcs_url = GCS.upload_to_bucket('testing',
                              './files/highlights_of_trudeaus_victory_speech.mp3',
-                            'realtalk-252903.appspot.com')
+                             GCS_BUCKET_NAME)
+        print('finished uploading to GCS bucket at url:', gcs_url)
         print('filename is ', self.file_name)
 
         #print('url:', gcs_url)
