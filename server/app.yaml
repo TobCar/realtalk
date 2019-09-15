@@ -1,6 +1,6 @@
-runtime: python
-env: flex
-entrypoint: gunicorn -b :$PORT app:app
+runtime: python37
+# env: flex
+entrypoint: gunicorn -b :$PORT app:app --timeout 300
 
 runtime_config:
   python_version: 3
@@ -9,9 +9,18 @@ runtime_config:
 # The settings below are to reduce costs during testing and are not appropriate
 # for production use. For more information, see:
 # https://cloud.google.com/appengine/docs/flexible/python/configuring-your-app-with-app-yaml
-manual_scaling:
-  instances: 1
+# manual_scaling:
+#   instances: 1
+#resources:
+#  cpu: 2
+#  memory_gb: 2.0
+#  disk_size_gb: 10
+#
+#
+
 resources:
   cpu: 2
-  memory_gb: 2.0
+  memory_gb: 2.3
   disk_size_gb: 10
+
+
