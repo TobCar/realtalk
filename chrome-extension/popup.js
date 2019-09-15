@@ -30,3 +30,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         }
     }
 });
+
+const player = document.querySelector('lottie-player');
+player.setAttribute('speed', '1');
+player.load('https://assets3.lottiefiles.com/temp/lf20_CP7ooz.json');
+document.getElementById("prompt").innerHTML = "";
