@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import soundfile as sf
+# import soundfile as sf
 
 
 def load_labels_df():
@@ -73,18 +73,18 @@ def windows_for_each_file_labels_split(labels_df, values_per_window, overlap):
     output_x = np.empty((0, values_per_window))
     output_y = []
     print("Creating windows (separate X and Y arrays)...")
-    for index, row in labels_df.iterrows():
-        print("Processing {}".format(index))
-        label = row["LABEL"]
-        filename_w_extension = index + ".flac"
-        path = "ASVspoof2019_PA_real/ASVspoof2019_PA_real/flac/{}".format(filename_w_extension)
-        data, sample_rate = sf.read(path)
-        windows = get_windows_from_array(data, values_per_window, overlap)
-        output_x = np.append(output_x, windows, axis=0)
-        output_y += [label] * windows.shape[0]
+    # for index, row in labels_df.iterrows():
+    #    print("Processing {}".format(index))
+    #    label = row["LABEL"]
+    #    filename_w_extension = index + ".flac"
+    #    path = "ASVspoof2019_PA_real/ASVspoof2019_PA_real/flac/{}".format(filename_w_extension)
+    #    data, sample_rate = sf.read(path)
+    #    windows = get_windows_from_array(data, values_per_window, overlap)
+    #    output_x = np.append(output_x, windows, axis=0)
+    #    output_y += [label] * windows.shape[0]
 
-    output_x = np.reshape(output_x, (output_x.shape[0], output_x.shape[1], 1))
-    output_y = np.array(output_y)
-    output_y = np.reshape(output_y, (output_y.shape[0], 1))
+    #output_x = np.reshape(output_x, (output_x.shape[0], output_x.shape[1], 1))
+    #output_y = np.array(output_y)
+    #output_y = np.reshape(output_y, (output_y.shape[0], 1))
 
-    return output_x, output_y
+    #return output_x, output_y

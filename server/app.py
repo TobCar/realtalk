@@ -60,6 +60,30 @@ class Status(Resource):
         }, 200
 
 
+class Analytics(Resource):
+    def get(self):
+        print('retrieving analytics')
+        result = []
+        info = VideoInfo.query.all()
+        for v in info:
+            result.append({
+                'id':v.id,
+                'url':v.url,
+                'file_name':v.file_name,
+                'tag':v.tag,
+                'video_id':v.video_id,
+                'count':v.count,
+                'output':v.output.split(',')
+            })
+
+        return {
+            "result": "OK",
+            "status": result
+        }, 200
+
+
+
+
 class Video(Resource):
 
     def __init__(self, _):
@@ -143,7 +167,7 @@ class Video(Resource):
         self.output = [0, 1, 0, 0, 1, 1]
         self.file_name = 'highlights_of_trudeaus_victory_speech.mp3'
         gcs_url = GCS.upload_to_bucket('testing',
-                             './files/highlights_of_trudeaus_victory_speech.mp3',
+                             AUDIO_FILE_BASE_PATH + '/highlights_of_trudeaus_victory_speech.mp3',
                              GCS_BUCKET_NAME)
         print('finished uploading to GCS bucket at url:', gcs_url)
         print('filename is ', self.file_name)
@@ -177,6 +201,7 @@ class Video(Resource):
 
 api.add_resource(Status, '/status')
 api.add_resource(Video, '/video')
+api.add_resource(Analytics, '/analytics')
 
 if __name__ == "__main__":
   app.run()
