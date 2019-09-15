@@ -6,7 +6,7 @@ body {
     padding: 0;
     margin: 0;
     font-size: 16px;
-    background-color: #fff;
+    background-color: #EFF6F8;
     font-weight: 1750;
     color: black;
 }
@@ -21,7 +21,7 @@ ul, li, a, a:hover, a:focus, a:active {
 .container {
     width: 100%;
     height: 100%;
-    height: max-content;
+    text-align: center;
 }
 
 .center {
@@ -34,13 +34,23 @@ ul, li, a, a:hover, a:focus, a:active {
     color: black;
 }
 
-.p1 {
-    margin-top: 10px;
+.logo {
+    max-width: 300px;
+    max-height: 200px;
+    margin-top: -25px;
 }
 
-.p2 {
+.lottie {
+  height: 180px;
+  width: 150px;
+  display: inline-block;
+  background-color: #EFF6F8;
+}
+
+.subtext {
     margin-top: 10px;
-    color: black;
+    color: gray;
+    font-size: 12px;
 }
 
 .bg-green {
