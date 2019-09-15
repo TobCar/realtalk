@@ -44,11 +44,12 @@ ul, li, a, a:hover, a:focus, a:active {
   height: 180px;
   width: 150px;
   display: inline-block;
+  background-color: #EFF6F8;
 }
 
 .subtext {
     margin-top: 10px;
-    color: slate-grey;
+    color: gray;
     font-size: 12px;
 }
 
