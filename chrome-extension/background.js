@@ -9,7 +9,7 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
                 file: "content.js"
             });
         } else {
-            chrome.browserAction.setPopup({ popup: "popup.html" });
+            chrome.tabs.sendMessage(tabs[0].id, { message: "default" });
         }
     });
 });
