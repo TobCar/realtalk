@@ -6,7 +6,7 @@ body {
     padding: 0;
     margin: 0;
     font-size: 16px;
-    background-color: #fff;
+    background-color: #EFF6F8;
     font-weight: 1750;
     color: black;
 }
@@ -32,6 +32,12 @@ ul, li, a, a:hover, a:focus, a:active {
     font-weight: 3000;
     margin-top: 20px;
     color: black;
+}
+
+.logo {
+  max-width: 300px;
+  max-height: 200px;
+  margin-top: -25px;
 }
 
 .p1 {
