@@ -7,8 +7,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from pytube import YouTube
 from ml_model import inference
+from gcs import GCS
 
 AUDIO_FILE_BASE_PATH = './files'
+GCS_BUCKET_NAME = 'realtalk-252903.appspot.com'
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'app.db')
@@ -21,7 +23,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = SQLALCHEMY_TRACK_MODIFICATIONS
 
 api = Api(app)
 db = SQLAlchemy(app)
-
 
 # DB stuff -------------------------------------------------------------
 def clear_data(session):
@@ -119,19 +120,25 @@ class Video(Resource):
 
         cached, result = self.check_cache(video_id)
         if cached:
+            continue # TODO: remove in production
             print('returning cached result')
             return {
                 "result": "OK",
                 "data": result['output']
             }, 200
 
-        yt = YouTube('http://youtube.com/watch?v=f20lWy2BTr8')
-        yt.register_on_complete_callback(self.convert_to_mp3)
-        yt.register_on_progress_callback(self.yt_progress_handler)
-        stream = yt.streams.filter(only_audio=True, subtype='mp4').first()
+        # yt = YouTube('http://youtube.com/watch?v=f20lWy2BTr8')
+        # yt.register_on_complete_callback(self.convert_to_mp3)
+        # yt.register_on_progress_callback(self.yt_progress_handler)
+        # stream = yt.streams.filter(only_audio=True, subtype='mp4').first()
+        # stream.download(output_path=AUDIO_FILE_BASE_PATH)
+        self.output = [0, 1, 0, 0, 1, 1]
+        gcs_url = GCS.upload_to_bucket('testing',
+                             './files/highlights_of_trudeaus_victory_speech.mp3',
+                            'realtalk-252903.appspot.com')
+        print('filename is ', self.file_name)
 
-        stream.download(output_path=AUDIO_FILE_BASE_PATH)
-
+        #print('url:', gcs_url)
         time_elapsed = 0
         while not self.output:
             print("developing prediction...", time_elapsed)

@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "realtalk-252903",
+  "private_key_id": "c580fb239c1b259ac08a5734645ebebc0f8b488f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCcHoNrQQ3mgVQc\nBx2amjXcvv6kcVW68BKXS+ith4DUxaTERwk4SEWrx6qgG3YdWKq1qolkLrb1MclH\nSh1S2Llsrn0yDDzQZUKMcxZ/wct1rB3mXgFtdNAeE6XQLwwRQnjSO8ayeAOuaiGO\nG954kFvImcwivRSjceKHML7sYpumpe8zNCWJRMus+3mIiZRYtU78693eeUlirRmm\nt5Hv0RFo3bpkSe8jNgvhkz3G0IVjgIxHSEYfTtZA5IPA5VVpneYsTjfAwyI9ahkW\nIcJlQAsXo28NGj8o8OT8KxEE4hbxYTeTDhnYOfOpXgMutWyawkCC4S17ifz5AoT8\nD/eJoZ0NAgMBAAECggEAI4r834e9iuuJwyHJlx+hwKKJJdYZrwgmK2TgUdWGOqrO\notMLYdFubzfzfCUUZIUBxH9RbUoHZFZT3VOdznVB7eDh5umLVOSg3In9JtPvptgr\nLH3ddFaCZT6S4w07AZjxGef7CjmxmN1Xy1tD8I3pH4gIRiZnEvkEGkQ6S2X9ytgk\nK00RM9LFhKIPMI+rdL3bQbxsPzyId2d/4oz+LIU3DLn+opj9JSWWIKZFY+rcgmRo\nVptDGFHTegi4BFqq8UneOIEyz0nGKWHM5ettSpIU7i2vgt/gFLhL/sIPpjyHB4vJ\n0510VZHZnXyJ9Is7vfNfu5/WwFc27Blrgrb0Ei9GEQKBgQDTfAFTHgg/TKEfFA5N\nqjADox/5l1+dRi2pefh8EoId+08YxqUgMq0tP0QpMIRp5ztl4mo5aFD1bErhctoT\nAZC941leHm6Cl2QUVyf20qULun6jwlRIC5Cxtm50QQcBzTfwB+lblBRKFIoN9p94\nhiMORa6olktnu2vcBWfZetqRpQKBgQC8+xziygP7gf9naCximUHOEHqbnNCaahFi\nZXi33cg6ayVPzohBAnOofTl4QJugIpSGkhoHeMVhurbr0LryujAmbyRfDUW/tG/B\ni2LHaXjnxIZduy7rSqGMxitFm6BzU59PDTgUqbMmQFUsO8es8SWC6gQcJS7PhQJ+\nYEMqbz+xSQKBgEScgJmErsxKgiNhEFrmEfm8HI2PLLgLopjPN2yZXJl5hOnW2I+f\noUuCsQxj7zGkkUK2uBuz2kAlSA3ogxOTeHACqGW+nb/EefWXaSHMqTsq4Bck3s8Y\n4XKmayNQTYOqHrHC/1R0sDhwfXGWR5qEei8RMF8Fk6UtywpwvoZyMyL5AoGAeoRy\nXbWKj2vgITIwVFv3hZi5ZFluBC3vx1LxyIJIZVdBgVPskfj88qb8szFvs4m3sObX\naTCrBoj+PjO8f9CllsVHVzhLl9Vq/pdXGuEOOXP3iJzp9jEUOyfeteoHQ71a8u0n\nBn5eXtYmYd7/vOc54n3E3Fpe1rrsuvG9ma02JcECgYEAjl6jo7V+lIk9a1J6sqYr\n2/C3f6bSX9Fy9OpxI0U3PwFl9GQJFb3KwZI+3RmKjij1sj0AKtI5dNuWzU4ZjSUx\nRemq065uHmGm+bA/N0JjbkCnJ2BjMd1Asj954lTlRgx7LIImidhiydutJ+tcpWzG\n0TJr+oPyln++tVLMlsc+JIg=\n-----END PRIVATE KEY-----\n",
+  "client_email": "cloud-storage-account@realtalk-252903.iam.gserviceaccount.com",
+  "client_id": "108748409485650022173",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/cloud-storage-account%40realtalk-252903.iam.gserviceaccount.com"
+}
